@@ -18,7 +18,7 @@ tags:
       url: 'https://github.com/deviget/minesweeper-API'
 
 paths:
-  '/games':
+  '/minesweeper/api/game':
     post:
       tags:
         - Game
@@ -40,7 +40,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/GameRequest'
             
-  '/games/{gameId}':
+  '/minesweeper/api/game/{gameId}':
     get:
       tags:
         - Game
@@ -137,10 +137,10 @@ components:
           items:
             $ref: '#/components/schemas/Cell'
           example: [
-            {value: 1, status: uncovered},
-            {value: 1, status: uncovered},
-            {value: 1, status: uncovered},
-            {value: B, status: uncovered}
+            {value: "1", status: uncovered},
+            {value: "1", status: uncovered},
+            {value: "1", status: uncovered},
+            {value: "B", status: uncovered}
             ]
     Cell:
       type: object
