@@ -4,6 +4,9 @@ A minesweeper API server. Contract first developed with editor.swagger.io
 
 OpenAPI doc may be found at [/docs](https://github.com/seguijoaquin/minesweeper-api/blob/450208cd569178325e9e3bc267b812ca3b2275ca/docs/minesweeper-1.0.0-swagger.yaml).
 
+App deployed in Heroku. Base URL is https://poc-minesweeper-api.herokuapp.com/
+
+
 ## Responsibilities
 
 1. Creating a new game. [See how](#create_game). 
@@ -53,7 +56,7 @@ Client and server error are expected to be represented following theProblem Deta
 | 401   | Unauthorized  |
 
 ```
-curl --request POST 'localhost:8080/minesweeper/api/game' \
+curl --request POST 'https://poc-minesweeper-api.herokuapp.com/minesweeper/api/game' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=' \ 
 --data-raw '{"rows": 2, "cols": 2, "mines": 1}
@@ -97,7 +100,7 @@ curl --request POST 'localhost:8080/minesweeper/api/game' \
 | 404   | Game not found|
 
 ```
-curl --request GET 'localhost:8080/minesweeper/api/game/:gameId' \
+curl --request GET 'https://poc-minesweeper-api.herokuapp.com/minesweeper/api/game/:gameId' \
 --header 'Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=' 
 ```
 
@@ -132,7 +135,7 @@ curl --request GET 'localhost:8080/minesweeper/api/game/:gameId' \
 | 409   | Conflict move |
 
 ```
-curl --request POST 'localhost:8080/minesweeper/api/game/:gameId' \
+curl --request POST 'https://poc-minesweeper-api.herokuapp.com/minesweeper/api/game/:gameId' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=' \ 
 --data-raw '{"row": 2, "col": 2, "action": "reveal"}
