@@ -1,4 +1,6 @@
 package com.minesweeper.api.adapter.persistance;
 
-public interface GameRepository {
+import org.springframework.data.repository.CrudRepository;
+
+public interface GameRepository extends CrudRepository {
 }

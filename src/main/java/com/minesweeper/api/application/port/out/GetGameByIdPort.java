@@ -1,8 +1,8 @@
-package com.minesweeper.api.application.port.in;
+package com.minesweeper.api.application.port.out;
 
 import com.minesweeper.api.domain.Game;
 import reactor.core.publisher.Mono;
 
-public interface GetGameByIdUseCase {
+public interface GetGameByIdPort {
     Mono<Game> getGameById(String gameId);
 }
