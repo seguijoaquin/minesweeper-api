@@ -4,6 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -13,5 +16,11 @@ public class ApplicationConfiguration {
     @Primary
     public Supplier<UUID> uuidSupplier() {
         return UUID::randomUUID;
+    }
+
+    @Bean
+    @Primary
+    public Clock clock() {
+        return Clock.systemUTC();
     }
 }
