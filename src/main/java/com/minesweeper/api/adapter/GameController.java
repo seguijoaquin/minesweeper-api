@@ -1,8 +1,8 @@
 package com.minesweeper.api.adapter;
 
-import com.minesweeper.api.application.port.GetGameByIdUseCase;
-import com.minesweeper.api.application.port.MakeAMoveUseCase;
-import com.minesweeper.api.application.port.StartNewGameUseCase;
+import com.minesweeper.api.application.port.in.GetGameByIdUseCase;
+import com.minesweeper.api.application.port.in.MakeAMoveUseCase;
+import com.minesweeper.api.application.port.in.StartNewGameUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
