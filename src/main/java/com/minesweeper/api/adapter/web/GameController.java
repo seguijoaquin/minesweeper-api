@@ -1,4 +1,4 @@
-package com.minesweeper.api.adapter;
+package com.minesweeper.api.adapter.web;
 
 import com.minesweeper.api.application.port.in.GetGameByIdUseCase;
 import com.minesweeper.api.application.port.in.MakeAMoveUseCase;
