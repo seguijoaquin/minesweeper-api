@@ -46,14 +46,13 @@ public class GameController {
 
     @PutMapping("/{gameId}")
     public Mono<ResponseEntity<?>> makeAMove(@PathVariable final String gameId, @RequestBody MoveRequest moveRequest) {
-        return makeAMoveUseCase.makeAMove(
-                MakeAMoveCommand.builder()
-                        .gameId(gameId)
-                        .row(moveRequest.getRow())
-                        .col(moveRequest.getCol())
-                        .action(Action.valueOf(moveRequest.getAction()))
-                        .build()
-        ).map(updatedGame -> ResponseEntity.status(HttpStatus.OK).body(updatedGame));
+        MakeAMoveCommand command =                 MakeAMoveCommand.builder()
+                .gameId(gameId)
+                .row(moveRequest.getRow())
+                .col(moveRequest.getCol())
+                .action(Action.valueOf(moveRequest.getAction()))
+                .build();
+        return makeAMoveUseCase.makeAMove(command).map(updatedGame -> ResponseEntity.status(HttpStatus.OK).body(updatedGame));
     }
 }
 
