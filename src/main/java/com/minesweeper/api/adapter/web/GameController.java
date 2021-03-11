@@ -1,9 +1,11 @@
 package com.minesweeper.api.adapter.web;
 
 import com.minesweeper.api.application.port.in.GetGameByIdUseCase;
+import com.minesweeper.api.application.port.in.MakeAMoveCommand;
 import com.minesweeper.api.application.port.in.MakeAMoveUseCase;
 import com.minesweeper.api.application.port.in.StartNewGameCommand;
 import com.minesweeper.api.application.port.in.StartNewGameUseCase;
+import com.minesweeper.api.domain.Action;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +45,15 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}")
-    public Mono<ResponseEntity<?>> makeAMove(@PathVariable final String gameId) {
-        return Mono.empty();
+    public Mono<ResponseEntity<?>> makeAMove(@PathVariable final String gameId, @RequestBody MoveRequest moveRequest) {
+        return makeAMoveUseCase.makeAMove(
+                MakeAMoveCommand.builder()
+                        .gameId(gameId)
+                        .row(moveRequest.getRow())
+                        .col(moveRequest.getCol())
+                        .action(Action.valueOf(moveRequest.getAction()))
+                        .build()
+        ).map(updatedGame -> ResponseEntity.status(HttpStatus.OK).body(updatedGame));
     }
 }
 
