@@ -46,7 +46,12 @@ public class StartNewGameService implements StartNewGameUseCase {
 
     private List<Cell> buildBoard(Integer rows, Integer cols, Integer mines) {
         String emptyValue = "0";
-        return Collections.nCopies(rows * cols, new Cell(emptyValue, CellStatus.COVERED));
+        List<Cell> emptyBoard = Collections.nCopies(rows * cols, new Cell(emptyValue, CellStatus.COVERED));
+        return plantMines(emptyBoard);
+    }
+
+    private List<Cell> plantMines(List<Cell> emptyBoard) {
+        return emptyBoard;
     }
 
     private String generateNewGameId() {
