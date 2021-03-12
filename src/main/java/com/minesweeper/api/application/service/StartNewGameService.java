@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -56,10 +55,26 @@ public class StartNewGameService implements StartNewGameUseCase {
         Cell emptyCell = new Cell(EMPTY, CellStatus.COVERED);
         Cell minedCell = new Cell(MINE, CellStatus.COVERED);
         Set<Integer> minePositions = getMinePositionsInBoard(rows, cols, mines);
-        for (int i = 0; i < (rows * cols); i++) {
-            board.add(minePositions.contains(i) ? minedCell : emptyCell);
+        // Iterate to fill with mines and empty cells
+        for (int boardIndex = 0; boardIndex < (rows * cols); boardIndex++) {
+            board.add(minePositions.contains(boardIndex) ? minedCell : emptyCell);
+        }
+        // Iterate again to fill with numbers next to mines
+        for (int boardIndex = 0; boardIndex < (rows * cols); boardIndex++) {
+                List<Integer> surroundings = board.get(boardIndex).getValue().equalsIgnoreCase(MINE) ?
+                        getSurroundingPositionsToFill(boardIndex) : Collections.emptyList();
+                surroundings.stream()
+                        .peek(position ->
+                                board.get(position).setValue(
+                                        String.valueOf(Integer.parseInt(board.get(position).getValue()) + 1)
+                                ));
+
         }
         return board;
+    }
+
+    private List<Integer> getSurroundingPositionsToFill(int boardIndex) {
+        return List.of();
     }
 
     private Set<Integer> getMinePositionsInBoard(final Integer rows, final Integer cols, final Integer mines) {
