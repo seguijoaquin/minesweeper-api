@@ -2,15 +2,34 @@ package com.minesweeper.api.application.service;
 
 import com.minesweeper.api.application.port.in.MakeAMoveCommand;
 import com.minesweeper.api.application.port.in.MakeAMoveUseCase;
+import com.minesweeper.api.application.port.out.GetGameByIdPort;
+import com.minesweeper.api.application.port.out.PersistGamePort;
 import com.minesweeper.api.domain.Game;
 import com.minesweeper.api.domain.GameAlreadyFinishedError;
+import com.minesweeper.api.domain.GameNotFoundError;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
+@AllArgsConstructor
 public class MakeAMoveService implements MakeAMoveUseCase {
+
+    private final GetGameByIdPort getGameByIdPort;
+    private final PersistGamePort persistGamePort;
+
     @Override
     public Mono<Game> makeAMove(MakeAMoveCommand command) {
-        return Mono.error(GameAlreadyFinishedError::new);
+        return getGameByIdPort.getGameById(command.getGameId())
+                .switchIfEmpty(Mono.error(GameNotFoundError::new))
+                .filter(game -> !game.hasFinished())
+                .switchIfEmpty(Mono.error(GameAlreadyFinishedError::new))
+                .flatMap(game -> processGameCommand(game, command));
+
     }
+
+    private Mono<Game> processGameCommand(Game game, MakeAMoveCommand command) {
+        return null;
+    }
+
 }

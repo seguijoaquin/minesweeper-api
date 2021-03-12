@@ -32,7 +32,8 @@ public final class GameObjectMother {
     }
 
     public static Game getFinishedGame() {
-        return getGame().toBuilder().status(GameStatus.WON).build();
+        //return getGame().toBuilder().status(GameStatus.WON).build();
+        return Game.builder().id("123").status(GameStatus.WON).build();
     }
 
     public static List<Cell> getBoard() {
