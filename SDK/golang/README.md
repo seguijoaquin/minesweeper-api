@@ -49,4 +49,6 @@ r, err := client.Service.Operation(auth, args)
 
 ## Author
 
+segui.joaquin@gmail.com
+
 

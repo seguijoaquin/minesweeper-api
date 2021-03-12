@@ -6,6 +6,9 @@ OpenAPI doc may be found at [/docs](https://github.com/seguijoaquin/minesweeper-
 
 App deployed in Heroku. Base URL is https://poc-minesweeper-api.herokuapp.com/
 
+Golang SDK may be found at [/SDK/golang](https://github.com/seguijoaquin/minesweeper-api/tree/main/SDK/golang).
+
+Important notes may be found at [NOTES]()
 
 ## Responsibilities
 
