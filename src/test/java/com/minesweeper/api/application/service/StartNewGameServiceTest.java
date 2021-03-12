@@ -12,12 +12,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.Random;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -27,18 +29,21 @@ import static org.mockito.Mockito.when;
 class StartNewGameServiceTest {
 
     private static final String MINE = "M";
+    private static final long RANDOM_TEST_SEED = 123L;
     @Mock
     private Supplier<UUID> uuidSupplier;
     @Mock
     private PersistGamePort persistGamePort;
     @Mock
     private Clock clock;
+    @Mock
+    private Supplier<Random> randomSupplier;
 
     private StartNewGameService startNewGameService;
 
     @BeforeEach
     void setUp() {
-        startNewGameService = new StartNewGameService(uuidSupplier, persistGamePort, clock);
+        startNewGameService = new StartNewGameService(uuidSupplier, persistGamePort, clock, randomSupplier);
     }
 
     @Test
@@ -51,7 +56,8 @@ class StartNewGameServiceTest {
         // WHEN
         when(uuidSupplier.get()).thenReturn(UUID.fromString(game.getId()));
         when(clock.instant()).thenReturn(Instant.parse(game.getStartedAt()));
-        when(persistGamePort.saveGame(game)).thenReturn(Mono.just(true));
+        when(persistGamePort.saveGame(Mockito.any(Game.class))).thenReturn(Mono.just(true));
+        when(randomSupplier.get()).thenReturn(new Random(RANDOM_TEST_SEED));
 
         StepVerifier.create(startNewGameService.startNewGame(command))
                 // THEN
