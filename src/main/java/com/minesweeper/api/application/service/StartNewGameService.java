@@ -52,12 +52,13 @@ public class StartNewGameService implements StartNewGameUseCase {
 
     private List<Cell> buildBoard(final Integer rows, final Integer cols, final Integer mines) {
         List<Cell> board = new ArrayList<>();
-        Cell emptyCell = new Cell(EMPTY, CellStatus.COVERED);
-        Cell minedCell = new Cell(MINE, CellStatus.COVERED);
         Set<Integer> minePositions = getMinePositionsInBoard(rows, cols, mines);
         // Iterate to fill with mines and empty cells
         for (int boardIndex = 0; boardIndex < (rows * cols); boardIndex++) {
-            board.add(minePositions.contains(boardIndex) ? minedCell : emptyCell);
+            board.add(minePositions.contains(boardIndex) ?
+                    new Cell(MINE, CellStatus.COVERED, boardIndex) :
+                    new Cell(EMPTY, CellStatus.COVERED, boardIndex)
+            );
         }
         // Iterate again to fill with numbers next to mines
         for (int boardIndex = 0; boardIndex < (rows * cols); boardIndex++) {

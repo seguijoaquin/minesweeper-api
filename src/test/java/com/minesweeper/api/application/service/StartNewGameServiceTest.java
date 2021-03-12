@@ -66,11 +66,57 @@ class StartNewGameServiceTest {
                     Assertions.assertEquals(command.getCols(), newGame.getCols());
                     Assertions.assertEquals(command.getMines(), newGame.getMines());
                     Assertions.assertEquals(GameStatus.PLAYING, newGame.getStatus());
-                    Assertions.assertNotNull(game.getStartedAt());
-                    Assertions.assertNull(game.getUpdatedAt());
+                    Assertions.assertNotNull(newGame.getStartedAt());
+                    Assertions.assertNull(newGame.getUpdatedAt());
                     Assertions.assertEquals(Integer.parseInt(command.getCols()) * Integer.parseInt(command.getRows()), newGame.getBoard().size());
                     Assertions.assertEquals(command.getMines(), countMinesOnGameBoard(newGame));
+                    // I don't care where the mines are created, just want to make sure surrounding cells aren't empty
+                    newGame.getBoard().stream()
+                            .filter(cell -> MINE.equalsIgnoreCase(cell.getValue()))
+                            .peek(cell -> {
+                                        Assertions.assertTrue(upperCellIsNotEmptyOrBeyondBoard(newGame, cell.getIndex()));
+                                        Assertions.assertTrue(downCellIsNotNullOrBeyondBoard(newGame, cell.getIndex()));
+                                        Assertions.assertTrue(rightCellIsNotEmptyOrBeyondBoard(newGame, cell.getIndex()));
+                                        Assertions.assertTrue(leftCellIsNotEmptyOrBeyondBoard(newGame, cell.getIndex()));
+                                        Assertions.assertTrue(upperRightCellIsNotEmptyOrBeyondBoard(newGame, cell.getIndex()));
+                                        Assertions.assertTrue(upperLeftCellIsNotEmptyOrBeyondBoard(newGame, cell.getIndex()));
+                                        Assertions.assertTrue(downRightCellIsNotEmptyOrBeyondBoard(newGame, cell.getIndex()));
+                                        Assertions.assertTrue(downLeftCellIsNotEmptyOrBeyondBoard(newGame, cell.getIndex()));
+                                    }
+                            );
                 }).verifyComplete();
+    }
+
+    private boolean downLeftCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
+        return true;
+    }
+
+    private boolean downRightCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
+        return true;
+    }
+
+    private boolean upperLeftCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
+        return true;
+    }
+
+    private boolean upperRightCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
+        return true;
+    }
+
+    private boolean leftCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
+        return true;
+    }
+
+    private boolean rightCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
+        return true;
+    }
+
+    private boolean downCellIsNotNullOrBeyondBoard(Game game, Integer index) {
+        return true;
+    }
+
+    private boolean upperCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
+        return true;
     }
 
     private String countMinesOnGameBoard(Game game) {

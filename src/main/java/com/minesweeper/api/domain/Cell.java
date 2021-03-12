@@ -16,4 +16,5 @@ import java.io.Serializable;
 public class Cell implements Serializable {
     private String value;
     private CellStatus status;
+    private Integer index;
 }

@@ -7,7 +7,6 @@ import com.minesweeper.api.domain.GameStatus;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.Collections;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -17,6 +16,8 @@ public final class GameObjectMother {
     private static final String ROWS = "3";
     private static final String COLS = "3";
     private static final String MINES = "2";
+    private static final String MINE = "M";
+    private static final String EMPTY = "0";
 
     public static Game getGame() {
         return Game.builder()
@@ -31,7 +32,18 @@ public final class GameObjectMother {
     }
 
     public static List<Cell> getBoard() {
-        var emptyBoard = Collections.nCopies(Integer.parseInt(ROWS) * Integer.parseInt(COLS), new Cell("0", CellStatus.COVERED));
-        return emptyBoard;
+        return List.of(
+                new Cell(EMPTY, CellStatus.COVERED, 0),
+                new Cell(MINE, CellStatus.COVERED, 1),
+                new Cell(EMPTY, CellStatus.COVERED, 2),
+                new Cell(EMPTY, CellStatus.COVERED, 3),
+                new Cell(EMPTY, CellStatus.COVERED, 4),
+                new Cell(EMPTY, CellStatus.COVERED, 5),
+                new Cell(EMPTY, CellStatus.COVERED, 6),
+                new Cell(EMPTY, CellStatus.COVERED, 7),
+                new Cell(EMPTY, CellStatus.COVERED, 8),
+                new Cell(MINE, CellStatus.COVERED, 9)
+        );
     }
+
 }
