@@ -31,6 +31,7 @@ public final class GameObjectMother {
     }
 
     public static List<Cell> getBoard() {
-        return Collections.nCopies(Integer.parseInt(ROWS) * Integer.parseInt(COLS), new Cell("0", CellStatus.COVERED));
+        var emptyBoard = Collections.nCopies(Integer.parseInt(ROWS) * Integer.parseInt(COLS), new Cell("0", CellStatus.COVERED));
+        return emptyBoard;
     }
 }
