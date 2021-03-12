@@ -31,6 +31,10 @@ public final class GameObjectMother {
                 .build();
     }
 
+    public static Game getFinishedGame() {
+        return getGame().toBuilder().status(GameStatus.WON).build();
+    }
+
     public static List<Cell> getBoard() {
         return List.of(
                 new Cell(EMPTY, CellStatus.COVERED, 0),
@@ -41,8 +45,7 @@ public final class GameObjectMother {
                 new Cell(EMPTY, CellStatus.COVERED, 5),
                 new Cell(EMPTY, CellStatus.COVERED, 6),
                 new Cell(EMPTY, CellStatus.COVERED, 7),
-                new Cell(EMPTY, CellStatus.COVERED, 8),
-                new Cell(MINE, CellStatus.COVERED, 9)
+                new Cell(MINE, CellStatus.COVERED, 8)
         );
     }
 

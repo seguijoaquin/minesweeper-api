@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
