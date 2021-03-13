@@ -10,6 +10,7 @@ import com.minesweeper.api.domain.Game;
 import com.minesweeper.api.domain.GameAlreadyFinishedError;
 import com.minesweeper.api.domain.GameNotFoundError;
 import com.minesweeper.api.domain.GameStatus;
+import com.minesweeper.api.domain.MovementForbiddenError;
 import com.minesweeper.api.objectMother.GameObjectMother;
 import com.minesweeper.api.objectMother.MakeAMoveObjectMother;
 import org.junit.jupiter.api.Assertions;
@@ -74,6 +75,24 @@ class MakeAMoveServiceTest {
         StepVerifier.create(makeAMoveService.makeAMove(command))
                 // THEN
                 .expectError(GameAlreadyFinishedError.class)
+                .verify();
+    }
+
+    @Test
+    @DisplayName("Making a move on a game from another user should throw an error")
+    void makingAMoveOnAnotherUsersGameShouldReturnAnError() {
+        // GIVEN
+        MakeAMoveCommand command = MakeAMoveObjectMother.revealCommand();
+        String anotherUser = "anotherUser";
+        Game game = GameObjectMother.getFinishedGame().toBuilder().user(anotherUser).build();
+
+        when(getGameByIdPort.getGameById(command.getGameId())).thenReturn(Mono.just(game));
+
+        // WHEN
+        Assertions.assertNotEquals(game.getUser(), command.getUser());
+        StepVerifier.create(makeAMoveService.makeAMove(command))
+                // THEN
+                .expectError(MovementForbiddenError.class)
                 .verify();
     }
 
