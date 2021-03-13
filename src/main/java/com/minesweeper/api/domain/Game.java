@@ -30,6 +30,7 @@ public class Game implements Serializable {
     private String updatedAt;
     private GameStatus status;
     private List<Cell> board;
+    private String user;
 
     public boolean hasFinished() {
         return !GameStatus.PLAYING.equals(this.getStatus());

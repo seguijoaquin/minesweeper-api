@@ -11,4 +11,5 @@ public class StartNewGameCommand {
     private final String rows;
     private final String cols;
     private final String mines;
+    private final String user;
 }

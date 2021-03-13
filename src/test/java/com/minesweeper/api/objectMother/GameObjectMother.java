@@ -18,6 +18,7 @@ public final class GameObjectMother {
     private static final String MINES = "2";
     private static final String MINE = "M";
     private static final String EMPTY = "0";
+    private static final String USER = "user";
 
     public static Game getGame() {
         return Game.builder()
@@ -28,6 +29,7 @@ public final class GameObjectMother {
                 .startedAt("2021-03-10T05:39:56.936214Z")
                 .status(GameStatus.PLAYING)
                 .board(getBoard())
+                .user(USER)
                 .build();
     }
 

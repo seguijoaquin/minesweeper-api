@@ -13,6 +13,7 @@ public final class StartNewGameObjectMother {
                 .rows(GameObjectMother.getGame().getRows())
                 .cols(GameObjectMother.getGame().getCols())
                 .mines(GameObjectMother.getGame().getMines())
+                .user(GameObjectMother.getGame().getUser())
                 .build();
     }
 

@@ -6,6 +6,7 @@ import com.minesweeper.api.application.port.in.MakeAMoveUseCase;
 import com.minesweeper.api.application.port.in.StartNewGameCommand;
 import com.minesweeper.api.application.port.in.StartNewGameUseCase;
 import com.minesweeper.api.domain.Action;
+import com.minesweeper.api.domain.Game;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,25 +32,23 @@ public class GameController {
     private final MakeAMoveUseCase makeAMoveUseCase;
 
     @PostMapping
-    public Mono<ResponseEntity<?>> startNewGame(@AuthenticationPrincipal Mono<Principal> principalMono, @RequestBody GameRequest gameRequest) {
-        return startNewGameUseCase.startNewGame(
-                StartNewGameCommand.builder()
-                        .rows(gameRequest.getRows())
-                        .cols(gameRequest.getCols())
-                        .mines(gameRequest.getMines())
-                        .build()
-        ).map(game -> ResponseEntity.status(HttpStatus.CREATED).body(game));
+    public Mono<ResponseEntity<Game>> startNewGame(@AuthenticationPrincipal Mono<Principal> principalMono, @RequestBody GameRequest gameRequest) {
+        return principalMono.map(Principal::getName)
+                .flatMap(name -> startNewGameUseCase.startNewGame(
+                        StartNewGameCommand.builder()
+                                .rows(gameRequest.getRows())
+                                .cols(gameRequest.getCols())
+                                .mines(gameRequest.getMines())
+                                .user(name)
+                        .build())
+                )
+                .map(game -> ResponseEntity.status(HttpStatus.CREATED).body(game));
     }
 
     @GetMapping("/{gameId}")
     public Mono<ResponseEntity<?>> getGameById(Mono<Principal> principalMono, @PathVariable final String gameId) {
         return getGameByIdUseCase.getGameById(gameId)
                 .map(game -> ResponseEntity.status(HttpStatus.OK).body(game));
-    }
-
-    @GetMapping("/ping")
-    public Mono<ResponseEntity<?>> ping(Mono<Principal> principalMono) {
-        return Mono.just(ResponseEntity.ok(principalMono.map(Principal::getName)));
     }
 
     @PutMapping("/{gameId}")
