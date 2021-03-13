@@ -40,7 +40,7 @@ public class GameController {
                                 .cols(gameRequest.getCols())
                                 .mines(gameRequest.getMines())
                                 .user(name)
-                        .build())
+                                .build())
                 )
                 .map(game -> ResponseEntity.status(HttpStatus.CREATED).body(game));
     }
@@ -53,13 +53,19 @@ public class GameController {
 
     @PutMapping("/{gameId}")
     public Mono<ResponseEntity<?>> makeAMove(Mono<Principal> principalMono, @PathVariable final String gameId, @RequestBody MoveRequest moveRequest) {
-        MakeAMoveCommand command = MakeAMoveCommand.builder()
-                .gameId(gameId)
-                .row(moveRequest.getRow())
-                .col(moveRequest.getCol())
-                .action(Action.valueOf(moveRequest.getAction()))
-                .build();
-        return makeAMoveUseCase.makeAMove(command).map(updatedGame -> ResponseEntity.status(HttpStatus.OK).body(updatedGame));
+        return principalMono.map(Principal::getName)
+                .flatMap(name -> makeAMoveUseCase.makeAMove(
+                        MakeAMoveCommand.builder()
+                                .gameId(gameId)
+                                .row(moveRequest.getRow())
+                                .col(moveRequest.getCol())
+                                .action(Action.valueOf(moveRequest.getAction()))
+                                .user(name)
+                                .build()
+                        )
+                )
+                .map(updatedGame -> ResponseEntity.status(HttpStatus.OK).body(updatedGame));
     }
+
 }
 

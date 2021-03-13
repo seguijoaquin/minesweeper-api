@@ -13,4 +13,5 @@ public class MakeAMoveCommand {
     private final String row;
     private final String col;
     private final Action action;
+    private final String user;
 }

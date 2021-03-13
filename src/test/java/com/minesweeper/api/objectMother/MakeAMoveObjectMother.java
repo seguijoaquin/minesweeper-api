@@ -17,6 +17,7 @@ public final class MakeAMoveObjectMother {
                 .col(COLUMN)
                 .row(ROW)
                 .gameId(GameObjectMother.getGame().getId())
+                .user(GameObjectMother.getGame().getUser())
                 .build();
     }
 
