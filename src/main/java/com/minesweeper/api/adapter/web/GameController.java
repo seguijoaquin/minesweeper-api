@@ -9,6 +9,7 @@ import com.minesweeper.api.domain.Action;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @RestController
 @AllArgsConstructor
@@ -28,7 +31,7 @@ public class GameController {
     private final MakeAMoveUseCase makeAMoveUseCase;
 
     @PostMapping
-    public Mono<ResponseEntity<?>> startNewGame(@RequestBody GameRequest gameRequest) {
+    public Mono<ResponseEntity<?>> startNewGame(@AuthenticationPrincipal Mono<Principal> principalMono, @RequestBody GameRequest gameRequest) {
         return startNewGameUseCase.startNewGame(
                 StartNewGameCommand.builder()
                         .rows(gameRequest.getRows())
@@ -39,14 +42,19 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public Mono<ResponseEntity<?>> getGameById(@PathVariable final String gameId) {
+    public Mono<ResponseEntity<?>> getGameById(Mono<Principal> principalMono, @PathVariable final String gameId) {
         return getGameByIdUseCase.getGameById(gameId)
                 .map(game -> ResponseEntity.status(HttpStatus.OK).body(game));
     }
 
+    @GetMapping("/ping")
+    public Mono<ResponseEntity<?>> ping(Mono<Principal> principalMono) {
+        return Mono.just(ResponseEntity.ok(principalMono.map(Principal::getName)));
+    }
+
     @PutMapping("/{gameId}")
-    public Mono<ResponseEntity<?>> makeAMove(@PathVariable final String gameId, @RequestBody MoveRequest moveRequest) {
-        MakeAMoveCommand command =                 MakeAMoveCommand.builder()
+    public Mono<ResponseEntity<?>> makeAMove(Mono<Principal> principalMono, @PathVariable final String gameId, @RequestBody MoveRequest moveRequest) {
+        MakeAMoveCommand command = MakeAMoveCommand.builder()
                 .gameId(gameId)
                 .row(moveRequest.getRow())
                 .col(moveRequest.getCol())
