@@ -56,6 +56,7 @@ public class StartNewGameService implements StartNewGameUseCase {
                 .redFlagIndexes(Collections.emptySet())
                 .questionFlagIndexes(Collections.emptySet())
                 .revealedIndexes(Collections.emptySet())
+                .user(command.getUser())
                 .build();
         return persistGamePort.saveGame(game).thenReturn(game);
     }
@@ -84,6 +85,7 @@ public class StartNewGameService implements StartNewGameUseCase {
     }
 
     private List<Integer> getSurroundingPositionsToFill(int boardIndex) {
+        // TODO: Implement!!!
         return List.of();
     }
 
