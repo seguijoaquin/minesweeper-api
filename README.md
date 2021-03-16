@@ -8,7 +8,7 @@ App deployed in Heroku. Base URL is https://poc-minesweeper-api.herokuapp.com/
 
 Golang SDK may be found at [/SDK/golang](https://github.com/seguijoaquin/minesweeper-api/tree/main/SDK/golang).
 
-Important notes may be found at [NOTES]()
+**Important notes may be found at [NOTES](https://github.com/seguijoaquin/minesweeper-api/blob/main/NOTES.md)**
 
 ## Responsibilities
 
