@@ -70,6 +70,9 @@ class StartNewGameServiceTest {
                     Assertions.assertNull(newGame.getUpdatedAt());
                     Assertions.assertEquals(Integer.parseInt(command.getCols()) * Integer.parseInt(command.getRows()), newGame.getBoard().size());
                     Assertions.assertEquals(command.getMines(), countMinesOnGameBoard(newGame));
+                    Assertions.assertFalse(newGame.getMinesIndexes().isEmpty());
+                    Assertions.assertTrue(newGame.getRedFlagIndexes().isEmpty());
+                    Assertions.assertTrue(newGame.getQuestionFlagIndexes().isEmpty());
                     // I don't care where the mines are created, just want to make sure surrounding cells aren't empty
                     newGame.getBoard().stream()
                             .filter(cell -> MINE.equalsIgnoreCase(cell.getValue()))
@@ -87,6 +90,7 @@ class StartNewGameServiceTest {
                 }).verifyComplete();
     }
 
+    // TODO: Implement!!!
     private boolean downLeftCellIsNotEmptyOrBeyondBoard(Game game, Integer index) {
         return true;
     }

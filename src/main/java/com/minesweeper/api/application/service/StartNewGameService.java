@@ -34,6 +34,16 @@ public class StartNewGameService implements StartNewGameUseCase {
 
     @Override
     public Mono<Game> startNewGame(StartNewGameCommand command) {
+        Set<Integer> minePositions = getMinePositionsInBoard(
+                Integer.valueOf(command.getRows()),
+                Integer.valueOf(command.getCols()),
+                Integer.valueOf(command.getMines())
+        );
+        List<Cell> board = buildBoard(
+                Integer.valueOf(command.getRows()),
+                Integer.valueOf(command.getCols()),
+                minePositions
+        );
         Game game = Game.builder()
                 .id(generateNewGameId())
                 .rows(command.getRows())
@@ -41,18 +51,17 @@ public class StartNewGameService implements StartNewGameUseCase {
                 .mines(command.getMines())
                 .startedAt(clock.instant().toString())
                 .status(GameStatus.PLAYING)
-                .board(buildBoard(
-                        Integer.valueOf(command.getRows()),
-                        Integer.valueOf(command.getCols()),
-                        Integer.valueOf(command.getMines()))
-                )
+                .board(board)
+                .minesIndexes(minePositions)
+                .redFlagIndexes(Collections.emptySet())
+                .questionFlagIndexes(Collections.emptySet())
+                .revealedIndexes(Collections.emptySet())
                 .build();
         return persistGamePort.saveGame(game).thenReturn(game);
     }
 
-    private List<Cell> buildBoard(final Integer rows, final Integer cols, final Integer mines) {
+    private List<Cell> buildBoard(final Integer rows, final Integer cols, final Set<Integer> minePositions) {
         List<Cell> board = new ArrayList<>();
-        Set<Integer> minePositions = getMinePositionsInBoard(rows, cols, mines);
         // Iterate to fill with mines and empty cells
         for (int boardIndex = 0; boardIndex < (rows * cols); boardIndex++) {
             board.add(minePositions.contains(boardIndex) ?
@@ -62,13 +71,13 @@ public class StartNewGameService implements StartNewGameUseCase {
         }
         // Iterate again to fill with numbers next to mines
         for (int boardIndex = 0; boardIndex < (rows * cols); boardIndex++) {
-                List<Integer> surroundings = board.get(boardIndex).getValue().equalsIgnoreCase(MINE) ?
-                        getSurroundingPositionsToFill(boardIndex) : Collections.emptyList();
-                surroundings.stream()
-                        .peek(position ->
-                                board.get(position).setValue(
-                                        String.valueOf(Integer.parseInt(board.get(position).getValue()) + 1)
-                                ));
+            List<Integer> surroundings = board.get(boardIndex).getValue().equalsIgnoreCase(MINE) ?
+                    getSurroundingPositionsToFill(boardIndex) : Collections.emptyList();
+            surroundings.stream()
+                    .peek(position ->
+                            board.get(position).setValue(
+                                    String.valueOf(Integer.parseInt(board.get(position).getValue()) + 1)
+                            ));
 
         }
         return board;

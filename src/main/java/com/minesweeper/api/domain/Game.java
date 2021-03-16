@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Builder(toBuilder = true)
@@ -31,8 +33,19 @@ public class Game implements Serializable {
     private GameStatus status;
     private List<Cell> board;
     private String user;
+    private Set<Integer> minesIndexes;
+    private Set<Integer> revealedIndexes;
+    private Set<Integer> redFlagIndexes;
+    private Set<Integer> questionFlagIndexes;
 
     public boolean hasFinished() {
         return !GameStatus.PLAYING.equals(this.getStatus());
     }
+
+    public boolean gameWon() {
+        return redFlagIndexes.equals(minesIndexes) &&
+                questionFlagIndexes.isEmpty() &&
+                Objects.equals(revealedIndexes.size(), board.size() - minesIndexes.size());
+    }
+
 }

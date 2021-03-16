@@ -7,10 +7,15 @@ import com.minesweeper.api.application.port.out.PersistGamePort;
 import com.minesweeper.api.domain.Game;
 import com.minesweeper.api.domain.GameAlreadyFinishedError;
 import com.minesweeper.api.domain.GameNotFoundError;
+import com.minesweeper.api.domain.GameStatus;
 import com.minesweeper.api.domain.MovementForbiddenError;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -31,9 +36,7 @@ public class MakeAMoveService implements MakeAMoveUseCase {
     }
 
     private Mono<Game> processGameCommand(Game game, MakeAMoveCommand command) {
-        Game updatedGame = game.toBuilder()
-                .id(game.getId())
-                .build();
+        Game updatedGame = command.getAction().act(game, command.getBoardIndex());
         persistGamePort.saveGame(updatedGame);
         return Mono.just(updatedGame);
     }
