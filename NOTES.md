@@ -48,4 +48,22 @@ The app was designed following hexagonal architecture, with a ports and adapters
  This package should only import classes from the domain package, and any interaction with an external system should be made by interfaces defined on the `port.out` package
  
  - **domain**: Domain objects and errors, related to business, should only contain pure java code and do not import code from other packages
+ 
+Every endpoint of the app needs an authentication header, and asumes the user already has one. Basic authentication was chosen
+to handle multiple users/accounts since it was an easy and friendly way of having a username stored next to the Game entity
+available for checking game ownership if needed and supporting the "multiple account" requirement. Same thing could have been done using tokens, api-keys or similar.
 
+As for the time tracking and saving/resuming game, since it is a RestAPI, each state change is persisted so time could be tracked from when
+the game starts up to current time if needed. And resuming a game could be achieved by just getting the game by ID, and making another move.
+
+The logic behind detecting when a game is over needed aditional data structures to be handled easily. First of all, when creating the game
+we need to know where the mines are, and if given a board index there is a mine on the board. Easiest way of doing it 
+is to have a Set of indexes storing each mine position on the board. Same thing needs to be made with flags on the board and revealed cells.
+
+So whenever we want to reveal a new cell, we first check if our Mines set contains that cell. In case it does, the game is over.
+If it doesn't we add that cell to the revealed cells Set. Once that is made, we need to check if we won:
+We do that by checking if the revealed cells set is equal to the total cells set minus the mines set. If it is not, we evaluate the value of the revealed cell.
+If it is empty, we repeat same procedure recursively on adjacent cells. Otherwise, the revealing stops there.
+ 
+In case we want to flag a cell, the procedure is quite the same. First we check if the flagged set is equal to the mines set
+and there are no unrevealed cells. If both things are ok then we won the game. If its not, we add the cell to the flagged cells.
