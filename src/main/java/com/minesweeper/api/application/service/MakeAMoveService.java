@@ -31,7 +31,11 @@ public class MakeAMoveService implements MakeAMoveUseCase {
     }
 
     private Mono<Game> processGameCommand(Game game, MakeAMoveCommand command) {
-        return null;
+        Game updatedGame = game.toBuilder()
+                .id(game.getId())
+                .build();
+        persistGamePort.saveGame(updatedGame);
+        return Mono.just(updatedGame);
     }
 
 }
